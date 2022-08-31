@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # jupyter notebooks
 .ipynb_checkpoints
+
+# Built gems
+.gem
