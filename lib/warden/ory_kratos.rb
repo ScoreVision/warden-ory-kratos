@@ -1,8 +1,9 @@
 # frozen_string_literal: true
-
 require 'warden'
-require_relative 'ory_kratos/version'
 require_relative 'ory_kratos/configuration'
+require_relative 'ory_kratos/strategies'
+require_relative 'ory_kratos/version'
+require_relative 'ory_kratos/failure_apps/unauthorized'
 
 module Warden
   module OryKratos

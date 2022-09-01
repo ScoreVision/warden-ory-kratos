@@ -1,5 +1,3 @@
-require 'warden-ory-kratos'
-
 module Warden
   module OryKratos
     module Strategies

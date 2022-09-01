@@ -1,4 +1,3 @@
-require 'warden-ory-kratos'
 require 'net/http'
 require 'logger'
 
@@ -11,7 +10,7 @@ module Warden
         SESSION_PATH = '/sessions/whoami'.freeze
 
         def valid?
-          logger.debug("validating #{SessionCookie.strategy_name}")
+          OryKratos.configuration.logger&.debug("validating with #{SessionCookie.strategy_name}")
           # Parse incoming request and look for a kratos session cookie
           request = Rack::Request.new(env)
           request.cookies.each_key do |k|
@@ -25,7 +24,7 @@ module Warden
         end
 
         def authenticate!
-          logger.debug("authenticating #{SessionCookie.strategy_name}")
+          OryKratos.configuration.logger&.debug("authenticating with #{SessionCookie.strategy_name}")
           # Parse kratos session cookie from incoming request
           incoming_request = Rack::Request.new(env)
           kratos_cookie = ''
@@ -37,7 +36,7 @@ module Warden
 
           # Verify session with Kratos API
           # Build request URL
-          uri = URI("https://beautiful-goodall-088evk4xui.projects.oryapis.com#{SESSION_PATH}")
+          uri = URI("#{OryKratos.configuration.kratos_backend_api}#{SESSION_PATH}")
           # Build request object, and make request
           session_response = Net::HTTP.start(
             uri.host,

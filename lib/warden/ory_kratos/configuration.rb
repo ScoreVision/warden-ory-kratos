@@ -1,4 +1,3 @@
-
 module Warden
   module OryKratos
     class Configuration
@@ -6,6 +5,7 @@ module Warden
       attr_accessor :kratos_external_api, :kratos_internal_api, :kratos_ui, :kratos_proxy_jwks, :logger
 
       def initialize
+        # TODO: Classes that require these attributes should raise when nil
         @kratos_external_api  = nil
         @kratos_internal_api  = nil
         @kratos_ui            = nil
@@ -13,7 +13,7 @@ module Warden
         @logger               = nil
       end
 
-      def self.kratos_backend_api
+      def kratos_backend_api
         return @kratos_internal_api || @kratos_external_api
       end
     end

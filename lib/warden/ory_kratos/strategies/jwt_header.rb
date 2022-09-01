@@ -1,4 +1,3 @@
-require 'warden-ory-kratos'
 require 'jwt'
 require 'net/http'
 require 'logger'
@@ -11,7 +10,7 @@ module Warden
 
         KEY_LOADER = -> (options) do
           if options[:kid_not_found] && @cache_last_update < Time.now.to_i - 300
-            logger.debug("Invalidating JWK cache. #{options[:kid]} not found from previous cache")
+            OryKratos.configuration.logger&.debug("Invalidating JWK cache. #{options[:kid]} not found from previous cache")
             @cached_keys = nil
           end
           @cached_keys ||= begin
@@ -44,28 +43,29 @@ module Warden
         end
 
         def valid?
-          logger.debug("validating #{self.strategy_name}")
+          OryKratos.configuration.logger&.debug("validating #{JWTHeader.strategy_name}")
           results = []
           Rack::Auth::AbstractRequest::AUTHORIZATION_KEYS.each do |key|
             header_value = env[key]
-            results.append(BEARER_PATTERN.match?(header_value))
+            results.append(HEADER_PATTERN['Authorization'].match?(header_value))
           end
           results.any?
         end
 
         def authenticate!
           # Extract encoded JWT from header
-          logger.debug('running authenticate!')
+          OryKratos.configuration.logger&.debug("authenticating with #{JWTHeader.strategy_name}")
           token_string = ''
           Rack::Auth::AbstractRequest::AUTHORIZATION_KEYS.each do |key|
             header_value = env[key]
-            if BEARER_PATTERN.match?(header_value)
-              m = BEARER_PATTERN.match(header_value)
+            if HEADER_PATTERN['Authorization'].match?(header_value)
+              m = HEADER_PATTERN['Authorization'].match(header_value)
               token_string = m[:token]
             end
           end
 
           begin
+            # TODO: DEBUG THIS NEXT.
             decoded_token = JWT.decode(token_string, nil, VERIFY_SIGNATURE, DECODE_OPTIONS, KEY_LOADER)
           rescue JWT::DecodeError => e
             puts "Error type: #{e.class}, message: #{e.message}"

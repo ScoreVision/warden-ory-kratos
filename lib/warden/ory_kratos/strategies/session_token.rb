@@ -1,4 +1,3 @@
-require 'warden-ory-kratos'
 require 'net/http'
 
 module Warden
@@ -9,7 +8,7 @@ module Warden
         SESSION_PATH = '/sessions/whoami'.freeze
 
         def valid?
-          logger.debug("validating #{SessionToken.strategy_name}")
+          OryKratos.configuration.logger&.debug("validating with #{SessionToken.strategy_name}")
           # We need the incoming request
           request = Rack::Request.new(env)
           # We need to check if the auth headers exist
@@ -26,7 +25,7 @@ module Warden
         end
 
         def authenticate!
-          logger.debug('running authenticate!')
+          OryKratos.configuration.logger&.debug("authenticating with #{SessionToken.strategy_name}")
           # We need the incoming request
           request = Rack::Request.new(env)
 
@@ -44,7 +43,7 @@ module Warden
 
           # We need to turn the token in for a kratos session
           # We need the session URI
-          uri = URI("https://beautiful-goodall-088evk4xui.projects.oryapis.com#{SESSION_PATH}")
+          uri = URI("#{OryKratos.configuration.kratos_backend_api}#{SESSION_PATH}")
           # We need to request the kratos session
           session_response = Net::HTTP.start(
             uri.host,

@@ -1,10 +1,23 @@
 # Warden::OryKratos
 
-A Warden authentication strategy that integrates with Ory Kratos.
+A module providing Warden authentication strategies that integrate with [Ory Kratos](https://www.ory.sh/kratos/).
 
-## Usage
+## Module configuration
 
-### Configuration
+```ruby
+# TODO: Add module configuration example here
+```
+
+## Strategies
+
+TODO: Add configuration instructions for each strategy as required. 
+
+### SessionCookie Strategy
+
+### SessionToken Strategy
+
+### JWTHeader Strategy
+
 
 ### Example
 
