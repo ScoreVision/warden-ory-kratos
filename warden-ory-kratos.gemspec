@@ -12,11 +12,13 @@ Gem::Specification.new do |gem|
   gem.version = Warden::OryKratos::VERSION
 
   gem.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
-  gem.files = `git ls-files`.split("\n")
-  gem.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.files = Dir.glob('/lib/**/*') + ['LICENSE', 'README.md']
+  gem.platform = Gem::Platform::RUBY
+  gem.required_ruby_version = '>= 2.3.0'
 
   gem.add_dependency 'warden'
   gem.add_dependency 'jwt'
   gem.add_dependency 'open-uri'
+
   gem.add_development_dependency 'rake'
 end
