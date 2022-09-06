@@ -21,4 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'open-uri'
 
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rubocop'
+  gem.add_development_dependency 'iruby'
 end
