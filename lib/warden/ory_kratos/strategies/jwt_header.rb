@@ -1,46 +1,14 @@
 require 'jwt'
 require 'net/http'
 require 'logger'
+require 'json'
 
 module Warden
   module OryKratos
     module Strategies
       class JWTHeader < TokenBase
         self.strategy_name = :JWTHeader.freeze
-
-        KEY_LOADER = -> (options) do
-          if options[:kid_not_found] && @cache_last_update < Time.now.to_i - 300
-            OryKratos.configuration.logger&.debug("Invalidating JWK cache. #{options[:kid]} not found from previous cache")
-            @cached_keys = nil
-          end
-          @cached_keys ||= begin
-                             @cache_last_update = Time.now.to_i
-                               ::JSON.parse(open(JWKS_URL).read)
-                           end
-        end.freeze
-
-        DECODE_OPTIONS = {
-          algorithm: 'ES256',
-          jwks: KEY_LOADER,
-          verify_expiration: true,
-          verify_not_before: true,
-          verify_iat: true,
-          required_claims: [
-            'identity'
-          ]
-        }.freeze
-        JWKS_URL = 'http://localhost:4000/.ory/proxy/jwks.json'.freeze
-        VERIFY_SIGNATURE = true.freeze
-
-        class << self
-          attr_accessor :jwks_url, :jwk_opts
-
-          def config(jwks_url = nil, decode_opts = nil)
-            # TODO: Rewrite the configuration mechanisms.
-            @jwks_url = jwks_url || JWKS_URL
-            @jwk_opts = decode_opts || DECODE_OPTIONS
-          end
-        end
+        @key_store = OryKratos::JWKStore.new(OryKratos.configuration.jwks_url)
 
         def valid?
           OryKratos.configuration.logger&.debug("validating #{JWTHeader.strategy_name}")
@@ -65,14 +33,19 @@ module Warden
           end
 
           begin
-            # TODO: DEBUG THIS NEXT.
-            decoded_token = JWT.decode(token_string, nil, VERIFY_SIGNATURE, DECODE_OPTIONS, KEY_LOADER)
+            decoded_token = JWT.decode(token_string, nil, OryKratos.configuration.jwk_verify_sig, OryKratos.configuration.jwk_decode_opt) do |header|
+              jwk = @key_store[header['kid']]
+              jwk.keypair
+            end
           rescue JWT::DecodeError => e
-            puts "Error type: #{e.class}, message: #{e.message}"
+            OryKratos.configuration.logger&.debug("Error type: #{e.class}, message: #{e.message}")
             throw(:warden)
           else
-            ident = decoded_token['identity']
-            success!(ident)
+            identity_session = decoded_token[0]['session']
+            OryKratos.configuration.logger&.debug(identity_session)
+            if identity_session['active'] == true
+              success!(identity_session['identity'])
+            end
           end
         end
       end
