@@ -3,6 +3,9 @@ require 'net/http'
 module Warden
   module OryKratos
     module Strategies
+      ##
+      # A warden strategy used to authenticate session tokens.
+      #
       class SessionToken < TokenBase
         self.strategy_name = :SessionToken.freeze
         SESSION_PATH = '/sessions/whoami'.freeze

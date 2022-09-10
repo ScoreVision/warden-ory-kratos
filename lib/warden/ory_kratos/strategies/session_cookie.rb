@@ -4,6 +4,9 @@ require 'logger'
 module Warden
   module OryKratos
     module Strategies
+      ##
+      # A warden strategy used to authenticate session cookies.
+      #
       class SessionCookie < Base
         self.strategy_name = :SessionCookie.freeze
         COOKIE_PREFIX = 'ory_session'.freeze

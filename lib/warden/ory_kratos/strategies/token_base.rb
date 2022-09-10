@@ -1,6 +1,10 @@
 module Warden
   module OryKratos
     module Strategies
+      ##
+      # Provides a base class to build strategies from.
+      # @abstract
+      #
       class TokenBase < Base
         # https://regexr.com/6s98f
         # When we lookup the headers in the request, rack will have

@@ -6,9 +6,12 @@ require 'json'
 module Warden
   module OryKratos
     module Strategies
+      ##
+      # A warden strategy used to authenticate JWTs from Ory cli proxy.
+      #
       class JWTHeader < TokenBase
         self.strategy_name = :JWTHeader.freeze
-        @key_store = OryKratos::JWKStore.new(OryKratos.configuration.jwks_url)
+        @key_store = OryKratos::JWKStore.new(OryKratos.configuration.kratos_proxy_jwks)
 
         def valid?
           OryKratos.configuration.logger&.debug("validating #{JWTHeader.strategy_name}")

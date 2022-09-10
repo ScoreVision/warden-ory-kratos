@@ -3,7 +3,7 @@ require_relative 'lib/warden/ory_kratos/version'
 Gem::Specification.new do |gem|
   gem.name = 'warden-ory-kratos'
   gem.authors = ['ScoreVision', 'Zach Norris']
-  gem.email = ['support@scorevision.com', 'znorris+gems@gmail.com']
+  gem.email = ['znorris+gems@gmail.com']
   gem.license = 'MIT'
 
   gem.description = 'Ory Kratos strategies for Warden. Strategies include Kratos native sessions, and JWT support for Ory proxy.'
@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'iruby'
+  gem.add_development_dependency 'yard'
 end
