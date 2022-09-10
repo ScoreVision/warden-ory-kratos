@@ -1,5 +1,7 @@
 # Warden::OryKratos
 
+[![Gem Version](https://badge.fury.io/rb/warden-ory-kratos.svg)](https://badge.fury.io/rb/warden-ory-kratos)
+
 `warden-ory-kratos` is a [Warden](https://github.com/hassox/warden) extension that integrates with [Ory Kratos](https://www.ory.sh/kratos/).
 
 [Ory Kratos](https://www.ory.sh/kratos/) is an open-source, API-first identity and user management service.
