@@ -1,12 +1,25 @@
 # Warden::OryKratos
 
-A module providing Warden authentication strategies that integrate with [Ory Kratos](https://www.ory.sh/kratos/).
+`warden-ory-kratos` is a [Warden](https://github.com/hassox/warden) extension that integrates with [Ory Kratos](https://www.ory.sh/kratos/).
 
-## RailsWarden usage
+[Ory Kratos](https://www.ory.sh/kratos/) is an open-source, API-first identity and user management service.
 
-_I'll be using warden with Rails, although you are not required to._
+## Installation
 
-Configure rails for use with `rails_warden`. Select the strategies your application will use.
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'warden-ory-kratos'
+```
+
+## Usage with Rails Warden
+
+See [RailsWarden](https://github.com/wardencommunity/rails_warden).
+
+### Inject RailsWarden into Rails
+
+Create a new Rails initializer and inject RailsWarden.
+Configure which of the strategies your application will use.
 
 ```ruby
 # config/initializers/warden.rb
@@ -20,7 +33,9 @@ Rails.configuration.middleware.use RailsWarden::Manager do |manager|
 end
 ```
 
-Configure Warden::OryKratos
+### Configure Warden::OryKratos
+
+Environment specific configuration for OryKratos.
 
 ```ruby
 # config/environments/development.rb
@@ -31,6 +46,7 @@ Warden::OryKratos.configure do |config|
 end
 ```
 
+### Add RailsWarden application mixin
 Add the auth mixin to the base controller class of your choosing.
 
 ```ruby
@@ -42,7 +58,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-Ensure the controller performs authentication.
+### Add auth to the controller
 
 ```ruby
 # app/controllers/articles_controller.rb
@@ -57,7 +73,7 @@ end
 
 ## Strategies
 
-There are three strategies available. When combined the `:SessionToken`, and `:SessionCookie` strategies make up a "Kratos native" implementation. While the `:JWTHeader` strategy provides compatibility with the Ory cli proxy.
+There are three strategies available. When combined, the `:SessionToken`, and `:SessionCookie` strategies make up a "Kratos native" implementation. While the `:JWTHeader` strategy provides compatibility with the Ory cli proxy.
 
 ### SessionCookie Strategy
 
@@ -67,7 +83,7 @@ There are three strategies available. When combined the `:SessionToken`, and `:S
 
 ### SessionToken Strategy
 
-- Looks within the rack request for a tokens in both `Authorization` and `X_Session_Token` headers.
+- Looks within the rack request for a token in both `Authorization` and `X_Session_Token` headers.
 - Makes an external request to Kratos for the user session.
 - Accepts or rejects the request based on the user session information.
 
@@ -78,3 +94,17 @@ There are three strategies available. When combined the `:SessionToken`, and `:S
 - Uses the JWKS to cryptographically verify the JWT was issued by the Ory cli proxy.
 - Extracts the user session from the valid JWT.
 - Accepts or rejects the request based on the user session information.
+
+## Development
+
+### Install development dependencies
+
+```shell
+gem install --dev warden-ory-kratos
+```
+
+### Run yard documentation server
+
+```shell
+yard server --reload
+```
