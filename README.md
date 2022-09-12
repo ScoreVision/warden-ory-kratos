@@ -1,6 +1,7 @@
 # Warden::OryKratos
 
-[![Gem Version](https://badge.fury.io/rb/warden-ory-kratos.svg)](https://badge.fury.io/rb/warden-ory-kratos)
+[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/ScoreVision/warden-ory-kratos)
+[![Gem Version](https://badge.fury.io/rb/warden-ory-kratos.svg)](https://github.com/ScoreVision/warden-ory-kratos)
 
 `warden-ory-kratos` is a [Warden](https://github.com/hassox/warden) extension that integrates with [Ory Kratos](https://www.ory.sh/kratos/).
 
